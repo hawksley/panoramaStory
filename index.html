@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<title>Panorama Story</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				background-color: #000000;
+				color: #ffffff;
+				margin: 0px;
+				padding: 0;
+				overflow: hidden;
+			}
+		</style>
+
+		<script id="vertexShader" type="x-shader/x-vertex">
+
+		varying vec2 vUv;
+
+		void main()
+		{
+			vUv = uv;
+			vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+			gl_Position = projectionMatrix * mvPosition;
+		}
+
+		</script>
+
+		<script id="fragmentShader" type="x-shader/x-fragment">
+
+		uniform sampler2D texture;
+		uniform vec3 color;
+
+		varying vec2 vUv;
+
+		void main()
+		{
+			vec3 tColor = texture2D( texture, vUv ).rgb;
+			float a = (length(tColor - color) - 0.5) * 7.0;
+
+			//		gl_FragColor = vec4(a, a, a, 1.0);
+			gl_FragColor = vec4(tColor, a);
+		}
+		</script>
+
+	</head>
+
+	<body>
+		<audio id="sound" autoplay=true > </audio>
+		<video id="movie" autoplay=true style="display:none"></video>
+		<div id="full"> <!-- this is the div that gets full screened -->
+			<div id="nav"></div> <!-- The nav system itself lives here -->
+		</div>
+	</body>
+
+	<!-- libraries used -->
+	<script src="js/lib/three.min.js"></script>
+	<script src="js/lib/threex.dynamictexture.js"></script>
+	<script src="js/lib/threex.chromakey.js"></script>
+
+	<!-- VRControls.js acquires positional information from connected VR devices and applies the transformations to a three.js camera object. -->
+	<script src="js/vr/VRControls.js"></script>
+
+	<!-- vrcursor.js is the focus cursor -->
+	<script src="js/vr/vrcursor.js"></script>
+
+	<!-- VREffect.js handles stereo camera setup and rendering. -->
+	<script src="js/vr/VREffect.js"></script>
+
+	<!-- This is where you create your scenes -->
+	<script src="js/vidconTest.js"></script>
+
+	<!-- This is the main code for the nav system -->
+	<script src="js/worldNav.js"></script>
+</html>
